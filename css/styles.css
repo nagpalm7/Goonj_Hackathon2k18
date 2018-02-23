@@ -1,0 +1,73 @@
+html{
+  background: url(http://d352ltojookjzf.cloudfront.net/wp-content/uploads/2014/04/12-free-blurred-backgrounds.jpg ) no-repeat center center fixed;
+  background-color: #D3D3D3;
+  background-size: cover;
+  background-size: cover;
+  background-size: cover;
+  background-size: cover;
+  position: absolute;
+
+
+}
+.hehe
+{
+    position: absolute;
+}
+ .navbar-inverse{
+    background-color: #000000;
+    border-color: #E7E7E7;
+}
+.navbar-inverse .navbar-brand {
+    color: #0dd4ec;
+}
+
+
+img{
+  padding-right: 2px;
+}
+
+
+#nav{
+  padding-bottom: 20px;
+ }
+
+body{
+   padding-top: 70px;
+}
+
+.error{
+  color: #db0000;
+}
+.success{
+color: #ffffff;
+}
+
+button{
+  position: absolute;
+
+}
+
+form{
+  padding-left: 300px;
+  padding-top: 50px;
+  position:absolute;
+  color: #000000;
+
+}
+
+#inlineCheckbox3{
+  margin-left: -8px;
+}
+#it
+{
+    margin-left:14px;
+    margin-top: 5px;
+}
+.width{
+  width: 700px;
+
+}
+
+#my{
+  margin-top: 5px;
+}
