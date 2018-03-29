@@ -1,6 +1,41 @@
 <?php
+require '../html/PHPMailer/PHPMailerAutoload.php';
+
+function mail_send($id,$content)
+{
+$mail = new PHPMailer;
+
+$mail->isSMTP();                            // Set mailer to use SMTP
+$mail->Host = 'smtp.gmail.com';             // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                     // Enable SMTP authentication
+$mail->Username = 'noreplydig@gmail.com';
+$mail->Password = 'password_here';
+$mail->SMTPSecure = 'tls';
+$mail->Port = 587;                          // TCP port to connect to
+
+$mail->setFrom('noreplydig@gmail.com', 'Design And Innovation Group');
+$mail->addAddress($id);   // Add a recipient
+
+$mail->isHTML(true);  // Set email format to HTML
+
+$bodyContent = $content;
+
+$mail->Subject = 'Design And Innovation Group';
+$mail->Body    = $bodyContent;
+
+
+
+
+if(!$mail->send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+
+echo "Error: Contact Administrator";
+}
+
+}
 // Initialize variables to null.
-session_start();
+
 $titleError ="";
 $messageError ="";
 $linkError ="";
@@ -42,11 +77,39 @@ if(isset($_POST['submit'])){
      }
    }
 
-$myobj->title="$title";
-$myobj->message="$message";
-$myobj->link="$link";
-$myjson=json_encode($myobj);
-echo "<span style='display:none;'>$myjson</span>";
+$con=mysqli_connect("localhost","root","root","UTECHNOS");
+// Check connection
+if (mysqli_connect_errno())
+{
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+$sql = "INSERT INTO link (title, message, link)
+VALUES ('$title', '$message', '$link' )";
+$con->query($sql);
+mysqli_commit($con);
+$maiHtml = '<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Notification</title>
+  </head>
+  <body style="min-width:100%">
+    <div style="border:4px solid grey;padding:10px 10px 10px 10px">
+      <div style="border:4px solid #c6c9ce;">
+        <div style="padding:40px 40px 40px 40px">
+        <h1 align="center">'.$title.'</h1>
+          <p>'.$message.'.</p>
+          <p style="text-align:center;padding-top:20px;">'.$link.'</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+';
+
+mail_send('nagpalm7@gmail.com',$maiHtml);
+mail_send('pareksha.manchanda@gmail.com',$maiHtml);
+
 /// $_SESSION['hehe']=$myjson;
 
 }
@@ -119,7 +182,7 @@ function test_input($data) {
                     </a>
                 </li>
                 <li>
-                    <a href="note.html">NOTIFICATIONS</a>
+                    <a href="note.php">NOTIFICATIONS</a>
                 </li>
             </ul>
         </div>
@@ -141,41 +204,51 @@ function test_input($data) {
       <form method = "post" class="width" action ="note.php">
   <div class="form-group">
     <label for="title">Title</label>
-    <input type="title" class="form-control" id="title" placeholder="Title" name="title"><span class="error"><?php echo $titleError;?></span>
+    <input type="title" class="form-control textbox" id="title" placeholder="Title" name="title"><span class="error"><?php echo $titleError;?></span>
   </div>
   <div class="form-group">
     <label for="message">Description</label>
-    <textarea class="form-control" rows="4" placeholder="Message" name="message"></textarea><span class="error"><?php echo $messageError;?></span>
+    <textarea class="form-control textbox" rows="4" placeholder="Message" name="message"></textarea><span class="error"><?php echo $messageError;?></span>
   </div>
- <div class="form-group">
+  <div class="form-group">
     <label for="link">Link</label>
-    <input type="Text" class="form-control" id="link" placeholder="Link" name="link"><span class="error"><?php echo $linkError;?></span>
+    <input type="Text" class="form-control textbox" id="link" placeholder="Link" name="link"><span class="error"><?php echo $linkError;?></span>
   </div>
-   <label class="checkbox-inline">
-  <input type="checkbox" id="inlineCheckbox1" value="cse"> <div id="my">CSE</div>
-</label>
-<label class="checkbox-inline">
-  <input type="checkbox" id="inlineCheckbox2" value="ece"> <div id="my">ECE</div>
-</label>
-<label class="checkbox-inline" >
-  <input type="checkbox" id="inlineCheckbox3" value="it">
-<div id="it">IT</div>
-</label>
-<div>
-<label class="checkbox-inline">
-  <input type="checkbox" id="inlineCheckbox1" value="eee"> <div id="my">EEE</div>
-</label>
-<label class="checkbox-inline">
-  <input type="checkbox" id="inlineCheckbox2" value="mech"> <div id="my">MECH</div>
-</label>
-<label class="checkbox-inline">
-  <input type="checkbox" id="inlineCheckbox4" value="bio-tech"> <div id="my">BIO-TECH</div>
-</label>
+  <div class="row-container">
+  <div class="row">
+      <label class="container checks">CSE
+       <input type="checkbox" id="inlineCheckbox1" value="eee">
+       <span class="checkmark"></span>
+     </label>
+   <label class="container checks">ECE
+     <input type="checkbox" id="inlineCheckbox2">
+     <span class="checkmark"></span>
+   </label>
+   <label class="container checks">EEE
+     <input type="checkbox" id="inlineCheckbox3">
+     <span class="checkmark"></span>
+   </label>
+ </div>
+ <div class="row">
+   <label class="container checks">MECH
+     <input type="checkbox" id="inlineCheckbox4">
+     <span class="checkmark"></span>
+   </label>
+   <label class="container checks">IT
+    <input type="checkbox" id="inlineCheckbox1">
+    <span class="checkmark"></span>
+  </label>
+  <label class="container checks">BIO-TECH
+    <input type="checkbox" id="inlineCheckbox2">
+    <span class="checkmark"></span>
+  </label>
+</div>
+</div>
+<button type="submit" name="submit" value="submit" class="btn btn-primary text-uppercase" >Submit</button>
 </div>
 <br>
-<div class="error"><?php echo $success;?></div>
 
-<button type="submit" name="submit" value="submit" class="btn btn-primary" >Submit</button>
+
 
     <script src="js/jquery.js"></script>
 
